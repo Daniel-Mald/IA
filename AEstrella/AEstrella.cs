@@ -47,7 +47,7 @@ namespace AEstrella
             nuevaX = nodo.X;
             nuevaY = nodo.Y + 1;
             if (nuevaY < _alto)
-            {
+            { 
                 sucesores.Add(_nodos[nuevaX, nuevaY]);
             }
             //hacia la izquierda
