@@ -10,9 +10,9 @@ namespace SlideTiles
 {
     public class Nodo
     {
-        public int G { get; set; }
+        public int G { get; set; } //costo real hasta al actual
         public int H { get; set; }
-        public int F { get { return G + H; } }
+        public int F { get { return G + H; } }// costo total estimado
         public Nodo? Padre { get; set; }
         public byte[,]? Tablero { get; set; } 
         
@@ -51,6 +51,7 @@ namespace SlideTiles
                 {
                     Tablero = nuevoTablero
                 };
+                Sucesores.Add(nuevo);
             }
             if (f < 2)
             {
@@ -67,6 +68,8 @@ namespace SlideTiles
                 {
                     Tablero = nuevoTablero
                 };
+                Sucesores.Add(nuevo);
+
             }
             if (c > 0)
             {
@@ -83,6 +86,8 @@ namespace SlideTiles
                 {
                     Tablero = nuevoTablero
                 };
+                Sucesores.Add(nuevo);
+
             }
             if (c < 2)
             {
@@ -99,13 +104,19 @@ namespace SlideTiles
                 {
                     Tablero = nuevoTablero
                 };
+                Sucesores.Add(nuevo);
+
             }
 
 
 
 
 
-            return new List<Nodo>();
+            return Sucesores;
+        }
+        public void calcularSucesores()
+        {
+
         }
         public void Heuristica(Nodo nodoA)
         {
@@ -140,10 +151,7 @@ namespace SlideTiles
                 for (int j = 0; j < 3; j++)
                 {
                     resultado += Math.Abs(i - meta[nodoA.Tablero[i, j]][0]) + Math.Abs(j - meta[nodoA.Tablero[i, j]][1]);
-                   // resultado += Math.Abs(j - meta[nodoA.Tablero[i, j]][1]);
-
-                    //var pos = meta[nodoA.Tablero[i, j]];
-                    //resultado += Math.Abs(i - pos[0]) + Math.Abs(j - pos[1]);
+                   
                 }
             }
             
@@ -151,6 +159,65 @@ namespace SlideTiles
             H = resultado;
         }
 
+        public List<Nodo> BuscarRuta(Nodo nodoInicial, Nodo nodoMeta)
+        {
+            List<Nodo> ruta = new List<Nodo>();
+            List<Nodo> abiertos = new List<Nodo>(); 
+            List<Nodo> cerrados = new List<Nodo>(); 
+
+            abiertos.Add(nodoInicial);
+
+            while (abiertos.Count > 0)
+            {
+                
+                Nodo nodoActual = abiertos.OrderBy(n => n.F).First();
+
+              
+                if (nodoActual.Tablero.Cast<byte>().SequenceEqual(nodoMeta.Tablero.Cast<byte>()))
+                {
+                    Nodo temp = nodoActual;
+                    while (temp != null)
+                    {
+                        ruta.Add(temp);
+                        temp = temp.Padre;
+                    }
+                    ruta.Reverse(); 
+                    return ruta;
+                }
+
+                abiertos.Remove(nodoActual);
+                cerrados.Add(nodoActual);
+
+                // Generamos sucesores
+                List<Nodo> sucesores = nodoActual.GenerarSucesores(nodoActual);
+
+                foreach (Nodo sucesor in sucesores)
+                {
+                    if (cerrados.Any(n => n.Tablero.Cast<byte>().SequenceEqual(sucesor.Tablero.Cast<byte>())))
+                    {
+                        continue; 
+                    }
+
+                    sucesor.G = nodoActual.G + 1;
+                    sucesor.Heuristica(nodoMeta); 
+                    sucesor.Padre = nodoActual;
+
+                    
+                    Nodo nodoExistente = abiertos.FirstOrDefault(n => n.Tablero.Cast<byte>().SequenceEqual(sucesor.Tablero.Cast<byte>()));
+                    if (nodoExistente == null)
+                    {
+                        abiertos.Add(sucesor);
+                    }
+                    else if (sucesor.G < nodoExistente.G)
+                    {
+                        nodoExistente.G = sucesor.G;
+                        nodoExistente.Padre = sucesor.Padre;
+                    }
+                }
+            }
+
+            return null;
+        }
         private static string GetHash(HashAlgorithm hashAlgorithm, string input)
         {
 

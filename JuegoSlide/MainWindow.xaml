@@ -6,7 +6,40 @@
         xmlns:local="clr-namespace:JuegoSlide"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
-    <Grid>
+    <Grid Background="CadetBlue">
+        <Grid.Resources>
+            <Style TargetType="Button">
+                <Setter Property="Background" Value="PaleGreen"/>
+                <Setter Property="FontSize" Value="40"/>
+                <Setter Property="Foreground" Value="ForestGreen"/>
+                <Setter Property="FontWeight" Value="Bold"/>
+            </Style>
+        </Grid.Resources>
+        <Grid  Height="400" Width="400">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="0.33*"/>
+                <ColumnDefinition Width="0.33*"/>
+                <ColumnDefinition Width="0.33*"/>
 
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="0.33*"/>
+                <RowDefinition Height="0.33*"/>
+
+                <RowDefinition Height="0.33*"/>
+
+            </Grid.RowDefinitions>
+            <Button x:Name="btn1" Grid.Column="0" Grid.Row="0">1</Button>
+            <Button x:Name="btn2" Grid.Column="1" Grid.Row="0">2</Button>
+            <Button x:Name="btn3" Grid.Column="2" Grid.Row="0">3</Button>
+            <Button x:Name="btn4" Grid.Column="0" Grid.Row="1">4</Button>
+            <Button x:Name="btn5" Grid.Column="1" Grid.Row="1">5</Button>
+            <Button x:Name="btn6" Grid.Column="2" Grid.Row="1">6</Button>
+            <Button x:Name="btn7" Grid.Column="0" Grid.Row="2">7</Button>
+            <Button x:Name="btn8" Grid.Column="1" Grid.Row="2">8</Button>
+
+
+            <Button Background="PaleVioletRed"  x:Name="btn" Grid.Column="2" Grid.Row="2"></Button>
+        </Grid>
     </Grid>
 </Window>
